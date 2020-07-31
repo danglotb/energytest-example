@@ -11,6 +11,7 @@ import org.powerapi.jjoules.junit.EnergyTest;
  * Unit test for simple App.
  */
 @RunWith(JUnitPlatform.class)
+@EnergyTest
 public class FibonacciTest 
 {
     private Fibonacci fibonacci;
@@ -32,7 +33,7 @@ public class FibonacciTest
         Assertions.assertEquals(1,this.fibonacci.fibo(1));
     }
 
-    @EnergyTest
+    
     public void fibonacciTenShouldBeFiftyFive()
     {
         Assertions.assertEquals(55,this.fibonacci.fibo(10));

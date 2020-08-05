@@ -1,41 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.powerapi.jjoules</groupId>
-  <artifactId>energytest-example</artifactId>
-  <version>1.0-SNAPSHOT</version>
+	<groupId>org.powerapi.jjoules</groupId>
+	<artifactId>energytest-example</artifactId>
+	<version>1.0-SNAPSHOT</version>
 
-  <name>Example of Energy Test</name>
-  <url>http://powerapi.org</url>
+	<name>Example of Energy Test</name>
+	<url>http://powerapi.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-    <junit.jupiter.version>5.5.2</junit.jupiter.version>
-    <junit.platform.version>1.5.2</junit.platform.version>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+		<junit.jupiter.version>5.5.2</junit.jupiter.version>
+		<junit.platform.version>1.5.2</junit.platform.version>
+	</properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit.jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-runner</artifactId>
-      <version>${junit.platform.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.powerapi.jjoules</groupId>
-      <artifactId>junit-jjoules</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-runner</artifactId>
+			<version>${junit.platform.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powerapi.jjoules</groupId>
+			<artifactId>junit-jjoules</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+		<!-- Configuration for call graph -->
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<!-- <configuration> <excludes> <exclude>org/powerapi/jjoules/Fibonacci.class</exclude> 
+							</excludes> </configuration> -->
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>call-graph</id>
+						<phase>test</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>java</executable>
+							<arguments>
+								<argument>-jar</argument>
+								<argument>javacg-0.1-SNAPSHOT-static.jar</argument>
+								<argument>${project.build.directory}/${project.build.finalName}-tests.jar</argument>
+							</arguments>
+							<outputFile>${project.build.directory}/call-graph/tests-callgraph.txt</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.powerapi.jjoules</groupId>
+				<artifactId>junit-jjoules</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>callgraph-matrix</id>
+						<phase>test</phase>
+						<goals>
+							<goal>generate-matrix</goal>
+						</goals>
+						<!-- example configuration -->
+						<!-- <configuration>
+							<outputDir>${project.build.directory}/tests-call-graphs</outputDir>
+							<outputFilename>matrix.txt</outputFilename>
+							<callgraphFilename>callgraph.txt</callgraphFilename>
+						</configuration> -->
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

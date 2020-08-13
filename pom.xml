@@ -21,6 +21,13 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
@@ -43,8 +50,17 @@
 
 	<build>
 
-		<!-- Configuration for call graph -->
 		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
+
+			<!-- Configuration for call graph -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -97,11 +113,9 @@
 							<goal>generate-matrix</goal>
 						</goals>
 						<!-- example configuration -->
-						<!-- <configuration>
-							<outputDir>${project.build.directory}/tests-call-graphs</outputDir>
-							<outputFilename>matrix.txt</outputFilename>
-							<callgraphFilename>callgraph.txt</callgraphFilename>
-						</configuration> -->
+						<!-- <configuration> <outputDir>${project.build.directory}/tests-call-graphs</outputDir> 
+							<outputFilename>matrix.txt</outputFilename> <callgraphFilename>callgraph.txt</callgraphFilename> 
+							</configuration> -->
 					</execution>
 				</executions>
 			</plugin>

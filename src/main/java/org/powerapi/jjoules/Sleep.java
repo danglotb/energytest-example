@@ -3,11 +3,9 @@
  */
 package org.powerapi.jjoules;
 
-/**
- * @author spirals
- *
- */
 public class Sleep {
+	
+	public static final Sleep SLEEP = new Sleep();
 	
 	public int sleep(int time) {
 		try {
